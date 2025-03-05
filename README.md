@@ -22,8 +22,10 @@ Before running the project, ensure you have:
 
 ### 1. Clone the Repository
 
+```
  git clone git@github.com:ppppbn/CleanWaterFeeManagement.git
  cd CleanWaterFeeManagement
+```
 
 ### 2. Set Up the Database
 
