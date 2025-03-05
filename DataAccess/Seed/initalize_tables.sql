@@ -20,7 +20,7 @@ CREATE TABLE customers (
     name VARCHAR(100) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
     water_meter_code VARCHAR(50) UNIQUE NOT NULL,
-    created_by INT NULL,
+    created_by INT NOT NULL,
     FOREIGN KEY (created_by) REFERENCES employees(id) ON DELETE SET NULL
 );
 GO
@@ -32,7 +32,7 @@ CREATE TABLE water_consumption (
     recorded_month INT CHECK (recorded_month BETWEEN 1 AND 12),
     recorded_year INT,
     value DECIMAL(10,2) NOT NULL,
-    recorded_by INT NULL,
+    recorded_by INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
     FOREIGN KEY (recorded_by) REFERENCES employees(id) ON DELETE SET NULL
 );
@@ -47,7 +47,7 @@ CREATE TABLE invoices (
     consumption_amount DECIMAL(10,2) NOT NULL,
     total DECIMAL(10,2) NOT NULL,
     status VARCHAR(20) CHECK (status IN ('Pending', 'Paid')) DEFAULT 'Pending',
-    created_by INT NULL,
+    created_by INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES employees(id) ON DELETE SET NULL
 );

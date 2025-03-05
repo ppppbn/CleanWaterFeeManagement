@@ -40,5 +40,11 @@ namespace CleanWaterFeeManagement.BusinessLogic
         {
             return EmployeeDAO.GetAllEmployees();
         }
+
+        public static Employee AuthenticateUser(string username, string password)
+        {
+            return EmployeeDAO.AuthenticateUser(username, password);
+        }
+
     }
 }

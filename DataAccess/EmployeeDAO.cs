@@ -85,5 +85,33 @@ namespace CleanWaterFeeManagement.DataAccess
             }
             return employees;
         }
+
+        public static Employee AuthenticateUser(string username, string password)
+        {
+            using (SqlConnection conn = DatabaseHelper.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("AuthenticateUser", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Employee
+                    {
+                        Id = reader.GetInt32(0),
+                        Name = reader.GetString(1),
+                        Username = reader.GetString(2),
+                        Role = reader.GetString(3)
+                    };
+                }
+            }
+
+            return null; // No user found
+        }
+
     }
 }
