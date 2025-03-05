@@ -74,6 +74,21 @@ BEGIN
 END;
 GO
 
+-- Stored Procedure: Update Employee
+CREATE PROCEDURE UpdateEmployee
+    @id INT,
+    @name VARCHAR(100),
+    @username VARCHAR(50),
+    @password VARCHAR(255),
+    @role VARCHAR(50)
+AS
+BEGIN
+    UPDATE employees
+    SET name = @name, username = @username, password = @password, role = @role
+    WHERE id = @id;
+END;
+GO
+
 -- Stored Procedure: Get All Employees
 CREATE PROCEDURE GetAllEmployees
 AS

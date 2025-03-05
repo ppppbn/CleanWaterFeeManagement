@@ -38,8 +38,10 @@ namespace CleanWaterFeeManagement.BusinessLogic
 
         public static List<Employee> GetEmployees()
         {
-            return EmployeeDAO.GetAllEmployees();
+            List<Employee> employees = EmployeeDAO.GetAllEmployees();
+            return employees;
         }
+
 
         public static Employee AuthenticateUser(string username, string password)
         {
