@@ -28,8 +28,6 @@ namespace CleanWaterFeeManagement.UI
                 LoggedInUserId = user.Id;
                 LoggedInRole = user.Role;
 
-                MessageBox.Show($"Xin chào {user.Role} {user.Name}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 this.Hide();
                 MainForm mainForm = new MainForm();
                 mainForm.Show();

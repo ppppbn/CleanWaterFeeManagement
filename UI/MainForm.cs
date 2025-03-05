@@ -36,7 +36,7 @@ namespace CleanWaterFeeManagement.UI
             string waterMeterCode = "WM-001";
             int createdBy = 1;  // Assuming Admin ID 1 is creating customers
 
-            bool success = CustomerService.RegisterCustomer(name, phoneNumber, waterMeterCode, createdBy);
+            bool success = CustomerService.AddCustomer(name, phoneNumber, waterMeterCode, createdBy);
 
             if (success)
                 MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

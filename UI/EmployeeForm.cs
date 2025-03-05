@@ -40,7 +40,7 @@ namespace CleanWaterFeeManagement.UI
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(role))
             {
-                MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Vui lòng điền tất cả các trường.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -48,12 +48,12 @@ namespace CleanWaterFeeManagement.UI
 
             if (success)
             {
-                MessageBox.Show("Employee added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Thêm nhân viên thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadEmployees(); // Refresh DataGridView
             }
             else
             {
-                MessageBox.Show("Failed to add employee.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -61,7 +61,7 @@ namespace CleanWaterFeeManagement.UI
         {
             if (dgvEmployees.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Please select an employee to edit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Vui lòng chọn một nhân viên để chỉnh sửa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -75,12 +75,12 @@ namespace CleanWaterFeeManagement.UI
 
             if (success)
             {
-                MessageBox.Show("Employee updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật nhân viên thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadEmployees();
             }
             else
             {
-                MessageBox.Show("Failed to update employee.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

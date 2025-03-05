@@ -8,6 +8,7 @@ IF OBJECT_ID('dbo.AddEmployee', 'P') IS NOT NULL DROP PROCEDURE dbo.AddEmployee;
 IF OBJECT_ID('dbo.UpdateEmployee', 'P') IS NOT NULL DROP PROCEDURE dbo.UpdateEmployee;
 IF OBJECT_ID('dbo.DeleteEmployee', 'P') IS NOT NULL DROP PROCEDURE dbo.DeleteEmployee;
 IF OBJECT_ID('dbo.GetAllEmployees', 'P') IS NOT NULL DROP PROCEDURE dbo.GetAllEmployees;
+IF OBJECT_ID('dbo.AuthenticateUser', 'P') IS NOT NULL DROP PROCEDURE dbo.AuthenticateUser;
 
 IF OBJECT_ID('dbo.AddWaterConsumption', 'P') IS NOT NULL DROP PROCEDURE dbo.AddWaterConsumption;
 IF OBJECT_ID('dbo.UpdateWaterConsumption', 'P') IS NOT NULL DROP PROCEDURE dbo.UpdateWaterConsumption;
@@ -128,6 +129,26 @@ CREATE PROCEDURE GetAllWaterConsumptions
 AS
 BEGIN
     SELECT id, customer_id, recorded_month, recorded_year, value, recorded_by FROM water_consumption;
+END;
+GO
+
+-- Stored Procedure: Update Water Consumption
+CREATE PROCEDURE UpdateWaterConsumption
+    @id INT,
+    @customer_id INT,
+    @recorded_month INT,
+    @recorded_year INT,
+    @value DECIMAL(10,2),
+    @recorded_by INT
+AS
+BEGIN
+    UPDATE water_consumption
+    SET customer_id = @customer_id, 
+        recorded_month = @recorded_month, 
+        recorded_year = @recorded_year, 
+        value = @value, 
+        recorded_by = @recorded_by
+    WHERE id = @id;
 END;
 GO
 

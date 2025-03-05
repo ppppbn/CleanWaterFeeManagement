@@ -6,7 +6,7 @@ namespace CleanWaterFeeManagement.BusinessLogic
 {
     public class CustomerService
     {
-        public static bool RegisterCustomer(string name, string phoneNumber, string waterMeterCode, int createdBy)
+        public static bool AddCustomer(string name, string phoneNumber, string waterMeterCode, int createdBy)
         {
             Customer customer = new Customer
             {
