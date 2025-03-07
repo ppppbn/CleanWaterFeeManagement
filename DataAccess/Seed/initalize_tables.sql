@@ -22,7 +22,7 @@ CREATE TABLE customers (
     customer_code VARCHAR(100) NOT NULL,-- bo sung de phuc vu search cho hoa don
     phone_number VARCHAR(20) NOT NULL,
     water_meter_code VARCHAR(50) UNIQUE NOT NULL,
-    created_by INT NULL, -- Cho phép NULL để hỗ trợ ON DELETE SET NULL
+    created_by INT NOT NULL,
     FOREIGN KEY (created_by) REFERENCES employees(id) ON DELETE SET NULL
 );
 GO
@@ -31,11 +31,10 @@ GO
 CREATE TABLE water_consumption (
     id INT IDENTITY(1,1) PRIMARY KEY,
     customer_id INT NOT NULL,
-    recorded_month TINYINT CHECK (recorded_month BETWEEN 1 AND 12) NOT NULL,
-    recorded_year SMALLINT NOT NULL,
+    recorded_month INT CHECK (recorded_month BETWEEN 1 AND 12),
+    recorded_year INT,
     value DECIMAL(10,2) NOT NULL,
-    recorded_by INT NULL, -- Cho phép NULL để hỗ trợ ON DELETE SET NULL
-    UNIQUE (customer_id, recorded_month, recorded_year),
+    recorded_by INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
     FOREIGN KEY (recorded_by) REFERENCES employees(id) ON DELETE SET NULL
 );
@@ -54,7 +53,7 @@ CREATE TABLE invoices (
     consumption_price DECIMAL(10,2) NOT NULL, -- Giá nước trên mỗi m³
     total DECIMAL(10,2) NOT NULL, -- Tổng tiền thanh toán
     status VARCHAR(20) CHECK (status IN ('Pending', 'Paid')) DEFAULT 'Pending',
-    created_by INT NULL, -- Cho phép NULL để hỗ trợ ON DELETE SET NULL
+    created_by INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES employees(id) ON DELETE SET NULL
 );
