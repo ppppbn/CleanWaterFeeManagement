@@ -2,15 +2,8 @@
 {
     partial class InvoiceForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,17 +13,13 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             txtSearchMa = new TextBox();
             btnSearch = new Button();
             dataHoaDon = new DataGridView();
+            hoaDonBindingSource = new BindingSource(components);
             btnCreateInvoice = new Button();
             txtMaNuoc = new TextBox();
             txtTenKH = new TextBox();
@@ -52,7 +41,9 @@
             numThanhTien = new NumericUpDown();
             label9 = new Label();
             label10 = new Label();
+            btnClear = new Button();
             ((System.ComponentModel.ISupportInitialize)dataHoaDon).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)hoaDonBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numHienTai).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTongSD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numTong).BeginInit();
@@ -66,6 +57,7 @@
             txtSearchMa.Name = "txtSearchMa";
             txtSearchMa.Size = new Size(222, 23);
             txtSearchMa.TabIndex = 0;
+            txtSearchMa.KeyDown += txtSearchMa_KeyDown;
             // 
             // btnSearch
             // 
@@ -87,9 +79,13 @@
             dataHoaDon.TabIndex = 2;
             dataHoaDon.CellContentClick += dataHoaDon_CellContentClick;
             // 
+            // hoaDonBindingSource
+            // 
+            hoaDonBindingSource.DataSource = typeof(HoaDon);
+            // 
             // btnCreateInvoice
             // 
-            btnCreateInvoice.Location = new Point(500, 531);
+            btnCreateInvoice.Location = new Point(462, 531);
             btnCreateInvoice.Name = "btnCreateInvoice";
             btnCreateInvoice.Size = new Size(102, 23);
             btnCreateInvoice.TabIndex = 3;
@@ -176,6 +172,7 @@
             button1.TabIndex = 16;
             button1.Text = "Xuất hóa đơn";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += btnExport_Click;
             // 
             // label6
             // 
@@ -192,6 +189,7 @@
             txtMaKH.Name = "txtMaKH";
             txtMaKH.Size = new Size(132, 23);
             txtMaKH.TabIndex = 17;
+            txtMaKH.KeyDown += txtMaKH_KeyDown;
             txtMaKH.KeyUp += txtMaKH_TextChanged;
             // 
             // btnTimKH
@@ -278,9 +276,20 @@
             label10.TabIndex = 29;
             label10.Text = "Đơn vị tính: Khối";
             // 
+            // btnClear
+            // 
+            btnClear.Location = new Point(570, 531);
+            btnClear.Name = "btnClear";
+            btnClear.Size = new Size(102, 23);
+            btnClear.TabIndex = 30;
+            btnClear.Text = "Làm mới";
+            btnClear.UseVisualStyleBackColor = true;
+            btnClear.Click += btnClear_Click;
+            // 
             // InvoiceForm
             // 
             ClientSize = new Size(1083, 582);
+            Controls.Add(btnClear);
             Controls.Add(label10);
             Controls.Add(numThanhTien);
             Controls.Add(label9);
@@ -310,6 +319,7 @@
             Name = "InvoiceForm";
             Text = "Quản Lý Hóa Đơn";
             ((System.ComponentModel.ISupportInitialize)dataHoaDon).EndInit();
+            ((System.ComponentModel.ISupportInitialize)hoaDonBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)numHienTai).EndInit();
             ((System.ComponentModel.ISupportInitialize)numTongSD).EndInit();
             ((System.ComponentModel.ISupportInitialize)numTong).EndInit();
@@ -320,6 +330,31 @@
 
         }
 
-        #endregion
+        private System.Windows.Forms.TextBox txtSearchMa;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.DataGridView dataHoaDon;
+        private System.Windows.Forms.Button btnCreateInvoice;
+        private System.Windows.Forms.TextBox txtMaNuoc;
+        private System.Windows.Forms.TextBox txtTenKH;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numHienTai;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtMaKH;
+        private System.Windows.Forms.Button btnTimKH;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numTongSD;
+        private System.Windows.Forms.NumericUpDown numTong;
+        private Label label8;
+        private NumericUpDown numGia;
+        private NumericUpDown numThanhTien;
+        private Label label9;
+        private Label label10;
+        private BindingSource hoaDonBindingSource;
+        private Button btnClear;
     }
 }
