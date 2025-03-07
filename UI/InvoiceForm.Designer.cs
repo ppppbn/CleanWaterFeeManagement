@@ -2,15 +2,8 @@
 {
     partial class InvoiceForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,12 +13,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             txtSearchMa = new TextBox();
@@ -320,6 +307,29 @@
 
         }
 
-        #endregion
+        private System.Windows.Forms.TextBox txtSearchMa;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.DataGridView dataHoaDon;
+        private System.Windows.Forms.Button btnCreateInvoice;
+        private System.Windows.Forms.TextBox txtMaNuoc;
+        private System.Windows.Forms.TextBox txtTenKH;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numHienTai;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtMaKH;
+        private System.Windows.Forms.Button btnTimKH;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numTongSD;
+        private System.Windows.Forms.NumericUpDown numTong;
+        private Label label8;
+        private NumericUpDown numGia;
+        private NumericUpDown numThanhTien;
+        private Label label9;
+        private Label label10;
     }
 }
