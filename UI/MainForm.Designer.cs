@@ -28,11 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnTestConnection = new Button();
-            testAddCustomer = new Button();
-            testAddEmployee = new Button();
-            btnAddWaterConsumption = new Button();
-            btnAddInvoice = new Button();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
@@ -43,58 +38,9 @@
             invoicesToolStripMenuItem = new ToolStripMenuItem();
             báoCáoToolStripMenuItem = new ToolStripMenuItem();
             generateReportsToolStripMenuItem = new ToolStripMenuItem();
+            label1 = new Label();
             menuStrip1.SuspendLayout();
             SuspendLayout();
-            // 
-            // btnTestConnection
-            // 
-            btnTestConnection.Location = new Point(100, 50);
-            btnTestConnection.Name = "btnTestConnection";
-            btnTestConnection.Size = new Size(200, 50);
-            btnTestConnection.TabIndex = 0;
-            btnTestConnection.Text = "Test Connection";
-            btnTestConnection.UseVisualStyleBackColor = true;
-            btnTestConnection.Click += btnTestConnection_Click;
-            // 
-            // testAddCustomer
-            // 
-            testAddCustomer.Location = new Point(474, 50);
-            testAddCustomer.Name = "testAddCustomer";
-            testAddCustomer.Size = new Size(200, 50);
-            testAddCustomer.TabIndex = 1;
-            testAddCustomer.Text = "Test Add Customer";
-            testAddCustomer.UseVisualStyleBackColor = true;
-            testAddCustomer.Click += btnAddCustomer_Click;
-            // 
-            // testAddEmployee
-            // 
-            testAddEmployee.Location = new Point(100, 167);
-            testAddEmployee.Name = "testAddEmployee";
-            testAddEmployee.Size = new Size(200, 50);
-            testAddEmployee.TabIndex = 2;
-            testAddEmployee.Text = "Test Add Employee";
-            testAddEmployee.UseVisualStyleBackColor = true;
-            testAddEmployee.Click += btnAddEmployee_Click;
-            // 
-            // btnAddWaterConsumption
-            // 
-            btnAddWaterConsumption.Location = new Point(474, 167);
-            btnAddWaterConsumption.Name = "btnAddWaterConsumption";
-            btnAddWaterConsumption.Size = new Size(200, 50);
-            btnAddWaterConsumption.TabIndex = 3;
-            btnAddWaterConsumption.Text = "Test Add Water Consumption";
-            btnAddWaterConsumption.UseVisualStyleBackColor = true;
-            btnAddWaterConsumption.Click += btnRecordWaterConsumption_Click;
-            // 
-            // btnAddInvoice
-            // 
-            btnAddInvoice.Location = new Point(100, 281);
-            btnAddInvoice.Name = "btnAddInvoice";
-            btnAddInvoice.Size = new Size(200, 50);
-            btnAddInvoice.TabIndex = 4;
-            btnAddInvoice.Text = "Test Add Invoice";
-            btnAddInvoice.UseVisualStyleBackColor = true;
-            btnAddInvoice.Click += btnGenerateInvoice_Click;
             // 
             // menuStrip1
             // 
@@ -164,20 +110,26 @@
             // generateReportsToolStripMenuItem
             // 
             generateReportsToolStripMenuItem.Name = "generateReportsToolStripMenuItem";
-            generateReportsToolStripMenuItem.Size = new Size(180, 22);
+            generateReportsToolStripMenuItem.Size = new Size(138, 22);
             generateReportsToolStripMenuItem.Text = "Tạo báo cáo";
             generateReportsToolStripMenuItem.Click += generateReportsToolStripMenuItem_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 14F);
+            label1.Location = new Point(228, 171);
+            label1.Name = "label1";
+            label1.Size = new Size(334, 25);
+            label1.TabIndex = 6;
+            label1.Text = "Hãy chọn chức năng ở menu phía trên";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnAddInvoice);
-            Controls.Add(btnAddWaterConsumption);
-            Controls.Add(testAddEmployee);
-            Controls.Add(testAddCustomer);
-            Controls.Add(btnTestConnection);
+            Controls.Add(label1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
@@ -190,12 +142,6 @@
         }
 
         #endregion
-
-        private Button btnTestConnection;
-        private Button testAddCustomer;
-        private Button testAddEmployee;
-        private Button btnAddWaterConsumption;
-        private Button btnAddInvoice;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
@@ -206,5 +152,6 @@
         private ToolStripMenuItem invoicesToolStripMenuItem;
         private ToolStripMenuItem báoCáoToolStripMenuItem;
         private ToolStripMenuItem generateReportsToolStripMenuItem;
+        private Label label1;
     }
 }
