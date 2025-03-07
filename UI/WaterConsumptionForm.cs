@@ -11,8 +11,10 @@ using System.Windows.Forms;
 
 namespace CleanWaterFeeManagement.UI
 {
-    public partial class WaterConsumptionForm: Form
+    public partial class WaterConsumptionForm : Form
     {
+        private DataTable waterConsumptionTable;
+
         public WaterConsumptionForm()
         {
             InitializeComponent();
@@ -25,68 +27,50 @@ namespace CleanWaterFeeManagement.UI
 
         private void LoadWaterConsumption()
         {
-            dgvWaterConsumption.DataSource = WaterConsumptionService.GetWaterConsumptions();
+            if (InvokeRequired)
+            {
+                Invoke(new Action(LoadWaterConsumption)); // ✅ Ensure UI safety
+                return;
+            }
+
+            // Reinitialize the data adapter when the form is reopened
+            WaterConsumptionService.InitializeDataAdapter();
+
+            waterConsumptionTable = WaterConsumptionService.GetWaterConsumptionData();
+
+            dgvWaterConsumption.DataSource = null; // ✅ Clear binding before reloading
+            dgvWaterConsumption.DataSource = waterConsumptionTable;
+
+            waterConsumptionTable.AcceptChanges(); // ✅ Mark initial data as clean
         }
 
-        private void btnAddWaterConsumption_Click(object sender, EventArgs e)
+        private void dgvWaterConsumption_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
-            if (!int.TryParse(txtCustomerId.Text, out int customerId) ||
-                !int.TryParse(txtRecordedMonth.Text, out int recordedMonth) ||
-                !int.TryParse(txtRecordedYear.Text, out int recordedYear) ||
-                !decimal.TryParse(txtConsumptionValue.Text, out decimal consumptionValue))
+            try
             {
-                MessageBox.Show("Dữ liệu không phù hợp. Vui lòng kiểm tra định dạng số.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                var isSaving = false;
+                // Skip updates when loading the form
+                if (waterConsumptionTable == null || waterConsumptionTable.GetChanges() == null)
+                {
+                    return;
+                }
+
+                // Prevent recursive updates
+                if (!isSaving)
+                {
+                    isSaving = true;
+                    WaterConsumptionService.SaveWaterConsumptionChanges(waterConsumptionTable);
+                    MessageBox.Show("Cập nhật thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // ✅ Defer the UI update to prevent conflicts
+                    BeginInvoke(new Action(() => LoadWaterConsumption()));
+                    isSaving = false;
+                }
             }
-
-            int recordedBy = LoginForm.LoggedInUserId; // The logged-in employee ID
-
-            bool success = WaterConsumptionService.RecordWaterConsumption(customerId, recordedMonth, recordedYear, consumptionValue, recordedBy);
-
-            if (success)
+            catch (Exception ex)
             {
-                MessageBox.Show("Ghi nhận chỉ số nước thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadWaterConsumption();
-            }
-            else
-            {
-                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnEditWaterConsumption_Click(object sender, EventArgs e)
-        {
-            if (dgvWaterConsumption.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Vui lòng chọn hàng dữ liệu cần cập nhật.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (!int.TryParse(dgvWaterConsumption.SelectedRows[0].Cells["Id"].Value.ToString(), out int id) ||
-                !int.TryParse(txtCustomerId.Text, out int customerId) ||
-                !int.TryParse(txtRecordedMonth.Text, out int recordedMonth) ||
-                !int.TryParse(txtRecordedYear.Text, out int recordedYear) ||
-                !decimal.TryParse(txtConsumptionValue.Text, out decimal consumptionValue))
-            {
-                MessageBox.Show("Dữ liệu không phù hợp. Vui lòng kiểm tra định dạng số.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            int recordedBy = LoginForm.LoggedInUserId;
-
-            bool success = WaterConsumptionService.EditWaterConsumption(id, customerId, recordedMonth, recordedYear, consumptionValue, recordedBy);
-
-            if (success)
-            {
-                MessageBox.Show("Dữ liệu được cập nhật thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadWaterConsumption();
-            }
-            else
-            {
-                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Đã có lỗi xảy ra: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
     }
 }

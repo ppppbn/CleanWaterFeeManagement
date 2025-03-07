@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using CleanWaterFeeManagement.DataAccess;
 using CleanWaterFeeManagement.Models;
 
@@ -6,6 +7,22 @@ namespace CleanWaterFeeManagement.BusinessLogic
 {
     public class EmployeeService
     {
+        public static DataTable GetEmployeeData()
+        {
+            return EmployeeDAO.GetEmployeeData();
+        }
+
+        public static void InitializeDataAdapter()
+        {
+            EmployeeDAO.InitializeDataAdapter(); // ✅ Calls DAO method to reinitialize data adapter
+        }
+
+
+        public static void SaveEmployeeChanges(DataTable updatedTable)
+        {
+            EmployeeDAO.SaveEmployeeChanges(updatedTable);
+        }
+
         public static bool RegisterEmployee(string name, string username, string password, string role)
         {
             Employee employee = new Employee

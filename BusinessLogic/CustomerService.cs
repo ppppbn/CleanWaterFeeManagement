@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using CleanWaterFeeManagement.DataAccess;
 using CleanWaterFeeManagement.Models;
 
@@ -6,6 +7,22 @@ namespace CleanWaterFeeManagement.BusinessLogic
 {
     public class CustomerService
     {
+        public static DataTable GetCustomerData()
+        {
+            return CustomerDAO.GetCustomerData();
+        }
+
+        public static void InitializeDataAdapter()
+        {
+            CustomerDAO.InitializeDataAdapter(); // ✅ Calls DAO method to reinitialize data adapter
+        }
+
+
+        public static void SaveCustomerChanges(DataTable updatedTable)
+        {
+            CustomerDAO.SaveCustomerChanges(updatedTable);
+        }
+
         public static bool AddCustomer(string name, string phoneNumber, string waterMeterCode, int createdBy)
         {
             Customer customer = new Customer

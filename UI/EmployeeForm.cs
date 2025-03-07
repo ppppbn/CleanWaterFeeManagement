@@ -15,6 +15,7 @@ namespace CleanWaterFeeManagement.UI
 {
     public partial class EmployeeForm : Form
     {
+        private DataTable employeeTable;
         public EmployeeForm()
         {
             InitializeComponent();
@@ -28,59 +29,48 @@ namespace CleanWaterFeeManagement.UI
 
         private void LoadEmployees()
         {
-            dgvEmployees.DataSource = EmployeeService.GetEmployees();
-        }
-
-        private void btnAddEmployee_Click(object sender, EventArgs e)
-        {
-            string name = txtName.Text;
-            string username = txtUsername.Text;
-            string password = txtPassword.Text;
-            string role = txtRole.Text;
-
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(role))
+            if (InvokeRequired)
             {
-                MessageBox.Show("Vui lòng điền tất cả các trường.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Invoke(new Action(LoadEmployees)); // ✅ Ensure UI safety
                 return;
             }
 
-            bool success = EmployeeService.RegisterEmployee(name, username, password, role);
+            // Reinitialize the data adapter when the form is reopened
+            EmployeeService.InitializeDataAdapter();
 
-            if (success)
-            {
-                MessageBox.Show("Thêm nhân viên thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadEmployees(); // Refresh DataGridView
-            }
-            else
-            {
-                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            employeeTable = EmployeeService.GetEmployeeData();
+
+            dgvEmployees.DataSource = null; // ✅ Clear binding before reloading
+            dgvEmployees.DataSource = employeeTable;
+
+            employeeTable.AcceptChanges();
         }
 
-        private void btnEditEmployee_Click(object sender, EventArgs e)
+        private void dgvEmployee_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvEmployees.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Vui lòng chọn một nhân viên để chỉnh sửa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                var isSaving = false;
+                // Skip updates when loading the form
+                if (employeeTable == null || employeeTable.GetChanges() == null)
+                {
+                    return;
+                }
+
+                // Prevent recursive updates
+                if (!isSaving)
+                {
+                    isSaving = true;
+                    EmployeeService.SaveEmployeeChanges(employeeTable);
+                    MessageBox.Show("Cập nhật thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // ✅ Defer the UI update to prevent conflicts
+                    BeginInvoke(new Action(() => LoadEmployees()));
+                    isSaving = false;
+                }
             }
-
-            int id = Convert.ToInt32(dgvEmployees.SelectedRows[0].Cells["Id"].Value);
-            string name = txtName.Text;
-            string username = txtUsername.Text;
-            string password = txtPassword.Text;
-            string role = txtRole.Text;
-
-            bool success = EmployeeService.EditEmployee(id, name, username, password, role);
-
-            if (success)
+            catch (Exception ex)
             {
-                MessageBox.Show("Cập nhật nhân viên thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadEmployees();
-            }
-            else
-            {
-                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Đã có lỗi xảy ra: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

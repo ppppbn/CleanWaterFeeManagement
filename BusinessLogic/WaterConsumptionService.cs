@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using CleanWaterFeeManagement.DataAccess;
 using CleanWaterFeeManagement.Models;
 
@@ -6,6 +7,22 @@ namespace CleanWaterFeeManagement.BusinessLogic
 {
     public class WaterConsumptionService
     {
+        public static DataTable GetWaterConsumptionData()
+        {
+            return WaterConsumptionDAO.GetWaterConsumptionData();
+        }
+
+        public static void InitializeDataAdapter()
+        {
+            WaterConsumptionDAO.InitializeDataAdapter(); // ✅ Calls DAO method to reinitialize data adapter
+        }
+
+
+        public static void SaveWaterConsumptionChanges(DataTable updatedTable)
+        {
+            WaterConsumptionDAO.SaveWaterConsumptionChanges(updatedTable);
+        }
+
         public static bool RecordWaterConsumption(int customerId, int recordedMonth, int recordedYear, decimal value, int recordedBy)
         {
             WaterConsumption consumption = new WaterConsumption

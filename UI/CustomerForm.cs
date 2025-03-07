@@ -1,9 +1,12 @@
 ﻿using CleanWaterFeeManagement.BusinessLogic;
+using System.Data;
 
 namespace CleanWaterFeeManagement.UI
 {
     public partial class CustomerForm : Form
     {
+        private DataTable customerTable;
+
         public CustomerForm()
         {
             InitializeComponent();
@@ -18,59 +21,49 @@ namespace CleanWaterFeeManagement.UI
         private void LoadCustomers()
         {
             dgvCustomers.DataSource = CustomerService.GetCustomers();
-        }
-
-        private void btnAddCustomer_Click(object sender, EventArgs e)
-        {
-            string name = txtCustomerName.Text;
-            string phoneNumber = txtPhoneNumber.Text;
-            string waterMeterCode = txtWaterMeterCode.Text;
-            int createdBy = LoginForm.LoggedInUserId; // The logged-in user
-
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(waterMeterCode))
+            if (InvokeRequired)
             {
-                MessageBox.Show("Vui lòng điền tất cả các trường.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Invoke(new Action(LoadCustomers)); // ✅ Ensure UI safety
                 return;
             }
 
-            bool success = CustomerService.AddCustomer(name, phoneNumber, waterMeterCode, createdBy);
+            // Reinitialize the data adapter when the form is reopened
+            CustomerService.InitializeDataAdapter();
 
-            if (success)
-            {
-                MessageBox.Show("Thêm khách hàng thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadCustomers(); // Refresh DataGridView
-            }
-            else
-            {
-                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            customerTable = CustomerService.GetCustomerData();
+
+            dgvCustomers.DataSource = null; // ✅ Clear binding before reloading
+            dgvCustomers.DataSource = customerTable;
+
+            customerTable.AcceptChanges();
         }
 
-        private void btnEditCustomer_Click(object sender, EventArgs e)
+        private void dgvCustomer_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvCustomers.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Vui lòng chọn một khách hàng để chỉnh sửa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                var isSaving = false;
+                // Skip updates when loading the form
+                if (customerTable == null || customerTable.GetChanges() == null)
+                {
+                    return;
+                }
+
+                // Prevent recursive updates
+                if (!isSaving)
+                {
+                    isSaving = true;
+                    CustomerService.SaveCustomerChanges(customerTable);
+                    MessageBox.Show("Cập nhật thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // ✅ Defer the UI update to prevent conflicts
+                    BeginInvoke(new Action(() => LoadCustomers()));
+                    isSaving = false;
+                }
             }
-
-            int id = Convert.ToInt32(dgvCustomers.SelectedRows[0].Cells["Id"].Value);
-            string name = txtCustomerName.Text;
-            string phoneNumber = txtPhoneNumber.Text;
-            string waterMeterCode = txtWaterMeterCode.Text;
-
-            bool success = CustomerService.EditCustomer(id, name, phoneNumber, waterMeterCode);
-
-            if (success)
+            catch (Exception ex)
             {
-                MessageBox.Show("Cập nhật khách hàng thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadCustomers();
-            }
-            else
-            {
-                MessageBox.Show("Đã có lỗi xảy ra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Đã có lỗi xảy ra: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
