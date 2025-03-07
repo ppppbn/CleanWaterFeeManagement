@@ -32,7 +32,8 @@ namespace CleanWaterFeeManagement.UI
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "SELECT * FROM tblHoaDon";
+                string query = "SELECT i.*,c.id as id_kh, c.name AS customer_name, c.water_meter_code " +
+                    "FROM invoices i LEFT JOIN customers c ON i.customer_id = c.id;";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -41,15 +42,15 @@ namespace CleanWaterFeeManagement.UI
                 {
                     HoaDon hd = new HoaDon
                     (
-                        Convert.ToInt32(reader["MaHoaDon"]),
-                        reader["MaDongHoNuoc"].ToString(),
-                        reader["MaKhachHang"].ToString(),
-                        reader["TenKhachHang"].ToString(),
-                        Convert.ToInt32(reader["TongSoNuocDSD"]),
-                        Convert.ToInt32(reader["TongSoNuocThangHT"]),
-                        Convert.ToInt32(reader["Thang"]),
-                        Convert.ToDecimal(reader["GiaKhoi"]),
-                        Convert.ToDecimal(reader["ThanhTien"])
+                        Convert.ToInt32(reader["id"]),
+                        reader["water_meter_code"].ToString(),
+                        reader["customer_code"].ToString(),
+                        reader["customer_name"].ToString(),
+                        Convert.ToInt32(reader["consumption_total"]),
+                        Convert.ToInt32(reader["consumption_amount"]),
+                        Convert.ToInt32(reader["collect_month"]),
+                        Convert.ToDecimal(reader["consumption_price"]),
+                        Convert.ToDecimal(reader["total"])
                     );
                     hoaDons.Add(hd);
                 }
@@ -88,12 +89,14 @@ namespace CleanWaterFeeManagement.UI
 
                 if (maKhachHang == "")
                 {
-                    query = @"SELECT * FROM tblHoaDon";
+                    query = "SELECT i.*,c.id as id_kh, c.name AS customer_name, c.water_meter_code " +
+                    "FROM invoices i LEFT JOIN customers c ON i.customer_id = c.id";
                     cmd = new SqlCommand(query, conn);
                 }
                 else
                 {
-                    query = @"SELECT * FROM tblHoaDon WHERE MaKhachHang = @MaKhachHang";
+                    query = "SELECT i.*,c.id as id_kh, c.name AS customer_name, c.water_meter_code " +
+                    "FROM invoices i LEFT JOIN customers c ON i.customer_id = c.id WHERE i.customer_code = @MaKhachHang ";
                     cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@MaKhachHang", maKhachHang);
                 }
@@ -105,15 +108,15 @@ namespace CleanWaterFeeManagement.UI
                 {
                     HoaDon hd = new HoaDon
                     (
-                        Convert.ToInt32(reader["MaHoaDon"]),
-                        reader["MaDongHoNuoc"].ToString(),
-                        reader["MaKhachHang"].ToString(),
-                        reader["TenKhachHang"].ToString(),
-                        Convert.ToInt32(reader["TongSoNuocDSD"]),
-                        Convert.ToInt32(reader["TongSoNuocThangHT"]),
-                        Convert.ToInt32(reader["Thang"]),
-                        Convert.ToDecimal(reader["GiaKhoi"]),
-                        Convert.ToDecimal(reader["ThanhTien"])
+                        Convert.ToInt32(reader["id"]),
+                        reader["water_meter_code"].ToString(),
+                        reader["customer_code"].ToString(),
+                        reader["customer_name"].ToString(),
+                        Convert.ToInt32(reader["consumption_total"]),
+                        Convert.ToInt32(reader["consumption_amount"]),
+                        Convert.ToInt32(reader["collect_month"]),
+                        Convert.ToDecimal(reader["consumption_price"]),
+                        Convert.ToDecimal(reader["total"])
                     );
                     hoaDons.Add(hd);
                 }
@@ -126,13 +129,12 @@ namespace CleanWaterFeeManagement.UI
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = @"
-            SELECT KH.MaKhachHang, KH.TenKhachHang, KH.MaDongHoNuoc, 
-                   COALESCE(SUM(HD.TongSoNuocDSD), 0) AS TongSoNuocDaSuDung 
-            FROM tblKhachHang KH 
-            LEFT JOIN tblHoaDon HD ON KH.MaKhachHang = HD.MaKhachHang 
-            WHERE KH.MaKhachHang = @MaKhachHang
-            GROUP BY KH.MaKhachHang, KH.TenKhachHang, KH.MaDongHoNuoc";
+                string query = @"SELECT KH.customer_code, KH.name, KH.water_meter_code, 
+                   COALESCE(SUM(HD.consumption_total), 0) AS TongSoNuocDaSuDung 
+                    FROM customers KH 
+                    LEFT JOIN invoices HD ON KH.id = HD.customer_id 
+                    WHERE KH.customer_code = @MaKhachHang
+                    GROUP BY KH.customer_code, KH.name, KH.water_meter_code";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@MaKhachHang", maKhachHang);
@@ -145,9 +147,9 @@ namespace CleanWaterFeeManagement.UI
                     HoaDon hd = new HoaDon
                     (
                         0,
-                        reader["MaDongHoNuoc"].ToString(),
-                        reader["MaKhachHang"].ToString(),
-                        reader["TenKhachHang"].ToString(),
+                        reader["water_meter_code"].ToString(),
+                        reader["customer_code"].ToString(),
+                        reader["name"].ToString(),
                         Convert.ToInt32(reader["TongSoNuocDaSuDung"]),
                         0,
                         0,
@@ -182,14 +184,17 @@ namespace CleanWaterFeeManagement.UI
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = @"INSERT INTO tblHoaDon (MaDongHoNuoc, MaKhachHang, TenKhachHang, Thang, TongSoNuocDSD, TongSoNuocThangHT, GiaKhoi, ThanhTien) 
-                         VALUES (@MaDongHoNuoc, @MaKhachHang, @TenKhachHang, @Thang, @TongSoNuocDSD, @TongSoNuocThangHT, @GiaKhoi, @ThanhTien)";
+                string query = @"INSERT INTO invoices 
+                    (water_meter_code, customer_id, customer_code, collect_month, collect_year, consumption_total, consumption_amount, consumption_price, total, created_by) 
+                    VALUES 
+                    (@MaDongHoNuoc, 
+                     (SELECT id FROM customers WHERE customer_code = @MaKhachHang), 
+                     @MaKhachHang, 
+                     3, 2025, @TongSoNuocDSD, @TongSoNuocThangHT, @GiaKhoi, @ThanhTien, 1)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@MaDongHoNuoc", hoaDon.MaDongHo);
                 cmd.Parameters.AddWithValue("@MaKhachHang", hoaDon.MaKhachHang);
-                cmd.Parameters.AddWithValue("@TenKhachHang", hoaDon.TenKhachHang);
-                cmd.Parameters.AddWithValue("@Thang", hoaDon.Thang);
                 cmd.Parameters.AddWithValue("@TongSoNuocDSD", hoaDon.TongDaSuDung);
                 cmd.Parameters.AddWithValue("@TongSoNuocThangHT", hoaDon.TongThangHienTai);
                 cmd.Parameters.AddWithValue("@GiaKhoi", hoaDon.GiaKhoiNuoc);
@@ -201,11 +206,12 @@ namespace CleanWaterFeeManagement.UI
             }
         }
 
+
         private bool DeleteHoaDon(string maHoaDon)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = @"Delete tblHoaDon where MaHoaDon = @MaHoaDon";
+                string query = @"Delete invoices where id = @MaHoaDon";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@MaHoaDon", maHoaDon);
