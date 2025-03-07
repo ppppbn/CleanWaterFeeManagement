@@ -13,13 +13,25 @@ namespace CleanWaterFeeManagement.DataAccess
         private static SqlCommandBuilder commandBuilder;
 
         // Fetch Employee Data
-        public static DataTable GetEmployeeData()
+        public static DataTable GetEmployeeData(string filter = null)
         {
             using (SqlConnection conn = DatabaseHelper.GetConnection())
             {
                 string query = "SELECT * FROM employees";
+
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    query += " WHERE username LIKE @username"; // ✅ Allows partial matching
+                }
+
                 dataAdapter = new SqlDataAdapter(query, conn);
-                commandBuilder = new SqlCommandBuilder(dataAdapter); // Auto-generates commands
+
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    dataAdapter.SelectCommand.Parameters.AddWithValue("@username", $"%{filter}%"); // ✅ SQL wildcard search
+                }
+
+                commandBuilder = new SqlCommandBuilder(dataAdapter);
 
                 DataTable dataTable = new DataTable();
                 dataAdapter.Fill(dataTable);

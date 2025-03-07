@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             dgvEmployees = new DataGridView();
+            txtSearch = new TextBox();
+            btnSearch = new Button();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvEmployees).BeginInit();
             SuspendLayout();
             // 
@@ -41,21 +44,54 @@
             dgvEmployees.TabIndex = 0;
             dgvEmployees.RowValidated += dgvEmployee_RowValidated;
             // 
+            // txtSearch
+            // 
+            txtSearch.Location = new Point(96, 57);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new Size(171, 23);
+            txtSearch.TabIndex = 1;
+            // 
+            // btnSearch
+            // 
+            btnSearch.Location = new Point(288, 57);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(75, 23);
+            btnSearch.TabIndex = 2;
+            btnSearch.Text = "Tìm kiếm";
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(96, 39);
+            label1.Name = "label1";
+            label1.Size = new Size(126, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Tìm theo tên tài khoản";
+            // 
             // EmployeeForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label1);
+            Controls.Add(btnSearch);
+            Controls.Add(txtSearch);
             Controls.Add(dgvEmployees);
             Name = "EmployeeForm";
             Text = "EmployeeForm";
             Load += EmployeeForm_Load;
             ((System.ComponentModel.ISupportInitialize)dgvEmployees).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private DataGridView dgvEmployees;
+        private TextBox txtSearch;
+        private Button btnSearch;
+        private Label label1;
     }
 }

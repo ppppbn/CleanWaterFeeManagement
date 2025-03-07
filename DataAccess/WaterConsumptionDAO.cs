@@ -12,13 +12,24 @@ namespace CleanWaterFeeManagement.DataAccess
         private static SqlCommandBuilder commandBuilder;
 
         // Fetch Water Consumption Data
-        public static DataTable GetWaterConsumptionData()
+        public static DataTable GetWaterConsumptionData(string filter = null)
         {
             using (SqlConnection conn = DatabaseHelper.GetConnection())
             {
                 string query = "SELECT * FROM water_consumption";
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    query += " WHERE customer_id = @customer_id"; // ✅ Allows partial matching
+                }
+
                 dataAdapter = new SqlDataAdapter(query, conn);
-                commandBuilder = new SqlCommandBuilder(dataAdapter); // Auto-generates commands
+
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    dataAdapter.SelectCommand.Parameters.Add("@customer_id", SqlDbType.Int).Value = filter;
+                }
+
+                commandBuilder = new SqlCommandBuilder(dataAdapter);
 
                 DataTable dataTable = new DataTable();
                 dataAdapter.Fill(dataTable);

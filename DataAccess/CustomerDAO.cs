@@ -13,13 +13,26 @@ namespace CleanWaterFeeManagement.DataAccess
         private static SqlCommandBuilder commandBuilder;
 
         // Fetch Customer Data
-        public static DataTable GetCustomerData()
+        public static DataTable GetCustomerData(string filter = null)
         {
             using (SqlConnection conn = DatabaseHelper.GetConnection())
             {
                 string query = "SELECT * FROM customers";
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    query += " WHERE name LIKE @name or phone_number LIKE @phone_number or water_meter_code LIKE @water_meter_code"; // ✅ Allows partial matching
+                }
+
                 dataAdapter = new SqlDataAdapter(query, conn);
-                commandBuilder = new SqlCommandBuilder(dataAdapter); // Auto-generates commands
+
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    dataAdapter.SelectCommand.Parameters.AddWithValue("@name", $"%{filter}%");
+                    dataAdapter.SelectCommand.Parameters.AddWithValue("@phone_number", $"%{filter}%");
+                    dataAdapter.SelectCommand.Parameters.AddWithValue("@water_meter_code", $"%{filter}%");
+                }
+
+                commandBuilder = new SqlCommandBuilder(dataAdapter);
 
                 DataTable dataTable = new DataTable();
                 dataAdapter.Fill(dataTable);

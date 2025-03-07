@@ -7,9 +7,9 @@ namespace CleanWaterFeeManagement.BusinessLogic
 {
     public class EmployeeService
     {
-        public static DataTable GetEmployeeData()
+        public static DataTable GetEmployeeData(string filter = null)
         {
-            return EmployeeDAO.GetEmployeeData();
+            return EmployeeDAO.GetEmployeeData(filter);
         }
 
         public static void InitializeDataAdapter()

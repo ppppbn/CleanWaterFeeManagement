@@ -15,22 +15,22 @@ namespace CleanWaterFeeManagement.UI
 
         private void CustomerForm_Load(object sender, EventArgs e)
         {
-            LoadCustomers();
+            LoadCustomers(txtSearch.Text.Trim());
         }
 
-        private void LoadCustomers()
+        private void LoadCustomers(string filter = null)
         {
             dgvCustomers.DataSource = CustomerService.GetCustomers();
             if (InvokeRequired)
             {
-                Invoke(new Action(LoadCustomers)); // ✅ Ensure UI safety
+                Invoke(new Action(() => LoadCustomers(txtSearch.Text.Trim()))); // ✅ Ensure UI safety
                 return;
             }
 
             // Reinitialize the data adapter when the form is reopened
             CustomerService.InitializeDataAdapter();
 
-            customerTable = CustomerService.GetCustomerData();
+            customerTable = CustomerService.GetCustomerData(filter);
 
             dgvCustomers.DataSource = null; // ✅ Clear binding before reloading
             dgvCustomers.DataSource = customerTable;
@@ -56,7 +56,7 @@ namespace CleanWaterFeeManagement.UI
                     CustomerService.SaveCustomerChanges(customerTable);
                     MessageBox.Show("Cập nhật thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // ✅ Defer the UI update to prevent conflicts
-                    BeginInvoke(new Action(() => LoadCustomers()));
+                    BeginInvoke(new Action(() => LoadCustomers(txtSearch.Text.Trim())));
                     isSaving = false;
                 }
             }
@@ -64,6 +64,12 @@ namespace CleanWaterFeeManagement.UI
             {
                 MessageBox.Show($"Đã có lỗi xảy ra: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string searchQuery = txtSearch.Text.Trim();
+            LoadCustomers(searchQuery);
         }
     }
 }

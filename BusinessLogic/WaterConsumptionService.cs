@@ -7,9 +7,9 @@ namespace CleanWaterFeeManagement.BusinessLogic
 {
     public class WaterConsumptionService
     {
-        public static DataTable GetWaterConsumptionData()
+        public static DataTable GetWaterConsumptionData(string filter = null)
         {
-            return WaterConsumptionDAO.GetWaterConsumptionData();
+            return WaterConsumptionDAO.GetWaterConsumptionData(filter);
         }
 
         public static void InitializeDataAdapter()
