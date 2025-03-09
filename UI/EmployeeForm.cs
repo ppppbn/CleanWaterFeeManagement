@@ -24,21 +24,21 @@ namespace CleanWaterFeeManagement.UI
 
         private void EmployeeForm_Load(object sender, EventArgs e)
         {
-            LoadEmployees();
+            LoadEmployees(txtSearch.Text.Trim());
         }
 
-        private void LoadEmployees()
+        private void LoadEmployees(string filter = null)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(LoadEmployees)); // ✅ Ensure UI safety
+                Invoke(new Action(() => LoadEmployees(txtSearch.Text.Trim()))); // ✅ Ensure UI safety
                 return;
             }
 
             // Reinitialize the data adapter when the form is reopened
             EmployeeService.InitializeDataAdapter();
 
-            employeeTable = EmployeeService.GetEmployeeData();
+            employeeTable = EmployeeService.GetEmployeeData(filter);
 
             dgvEmployees.DataSource = null; // ✅ Clear binding before reloading
             dgvEmployees.DataSource = employeeTable;
@@ -64,7 +64,7 @@ namespace CleanWaterFeeManagement.UI
                     EmployeeService.SaveEmployeeChanges(employeeTable);
                     MessageBox.Show("Cập nhật thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // ✅ Defer the UI update to prevent conflicts
-                    BeginInvoke(new Action(() => LoadEmployees()));
+                    BeginInvoke(new Action(() => LoadEmployees(txtSearch.Text.Trim())));
                     isSaving = false;
                 }
             }
@@ -72,6 +72,12 @@ namespace CleanWaterFeeManagement.UI
             {
                 MessageBox.Show($"Đã có lỗi xảy ra: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string searchQuery = txtSearch.Text.Trim();
+            LoadEmployees(searchQuery);
         }
     }
 }

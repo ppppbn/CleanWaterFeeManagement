@@ -22,21 +22,21 @@ namespace CleanWaterFeeManagement.UI
 
         private void WaterConsumptionForm_Load(object sender, EventArgs e)
         {
-            LoadWaterConsumption();
+            LoadWaterConsumption(txtSearch.Text.Trim());
         }
 
-        private void LoadWaterConsumption()
+        private void LoadWaterConsumption(string filter = null)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(LoadWaterConsumption)); // ✅ Ensure UI safety
+                Invoke(new Action(() => LoadWaterConsumption(txtSearch.Text.Trim()))); // ✅ Ensure UI safety
                 return;
             }
 
             // Reinitialize the data adapter when the form is reopened
             WaterConsumptionService.InitializeDataAdapter();
 
-            waterConsumptionTable = WaterConsumptionService.GetWaterConsumptionData();
+            waterConsumptionTable = WaterConsumptionService.GetWaterConsumptionData(filter);
 
             dgvWaterConsumption.DataSource = null; // ✅ Clear binding before reloading
             dgvWaterConsumption.DataSource = waterConsumptionTable;
@@ -62,7 +62,7 @@ namespace CleanWaterFeeManagement.UI
                     WaterConsumptionService.SaveWaterConsumptionChanges(waterConsumptionTable);
                     MessageBox.Show("Cập nhật thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // ✅ Defer the UI update to prevent conflicts
-                    BeginInvoke(new Action(() => LoadWaterConsumption()));
+                    BeginInvoke(new Action(() => LoadWaterConsumption(txtSearch.Text.Trim())));
                     isSaving = false;
                 }
             }
@@ -72,5 +72,10 @@ namespace CleanWaterFeeManagement.UI
             }
         }
 
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string searchQuery = txtSearch.Text.Trim();
+            LoadWaterConsumption(searchQuery);
+        }
     }
 }

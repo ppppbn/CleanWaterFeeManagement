@@ -7,9 +7,9 @@ namespace CleanWaterFeeManagement.BusinessLogic
 {
     public class CustomerService
     {
-        public static DataTable GetCustomerData()
+        public static DataTable GetCustomerData(string filter = null)
         {
-            return CustomerDAO.GetCustomerData();
+            return CustomerDAO.GetCustomerData(filter);
         }
 
         public static void InitializeDataAdapter()
