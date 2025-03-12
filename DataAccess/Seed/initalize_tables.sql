@@ -19,7 +19,6 @@ GO
 CREATE TABLE customers (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    customer_code VARCHAR(100) NOT NULL,-- bo sung de phuc vu search cho hoa don
     phone_number VARCHAR(20) NOT NULL,
     water_meter_code VARCHAR(50) UNIQUE NOT NULL,
     created_by INT NOT NULL,
@@ -43,14 +42,10 @@ GO
 -- Create Invoices Table
 CREATE TABLE invoices (
     id INT IDENTITY(1,1) PRIMARY KEY,
-    water_meter_code VARCHAR(50) NOT NULL,
     customer_id INT NOT NULL,
-    customer_code VARCHAR(100) NOT NULL,
     collect_month TINYINT CHECK (collect_month BETWEEN 1 AND 12) NOT NULL,
     collect_year SMALLINT NOT NULL,
     consumption_amount DECIMAL(10,2) NOT NULL, -- Số nước tiêu thụ trong kỳ
-    consumption_total DECIMAL(10,2) NOT NULL, -- Tổng số nước đã tiêu thụ
-    consumption_price DECIMAL(10,2) NOT NULL, -- Giá nước trên mỗi m³
     total DECIMAL(10,2) NOT NULL, -- Tổng tiền thanh toán
     status VARCHAR(20) CHECK (status IN ('Pending', 'Paid')) DEFAULT 'Pending',
     created_by INT NOT NULL,
@@ -71,20 +66,20 @@ SET IDENTITY_INSERT employees OFF;
 
 SET IDENTITY_INSERT customers ON;
 
-INSERT INTO customers (id, name, customer_code, phone_number, water_meter_code, created_by) 
+INSERT INTO customers (id, name, phone_number, water_meter_code, created_by) 
 VALUES 
-(1, 'NguyenVanA', 'KH0001', '0912345678', 'WM1001', 1),
-(2, 'NguyenVanB', 'KH0002', '0923456789', 'WM1002', 2),
-(3, 'NguyenVanC', 'KH0003', '0934567890', 'WM1003', NULL);
+(1, 'NguyenVanA', '0912345678', 'WM1001', 1),
+(2, 'NguyenVanB', '0923456789', 'WM1002', 2),
+(3, 'NguyenVanC', '0934567890', 'WM1003', NULL);
 
 SET IDENTITY_INSERT customers OFF;
 
 SET IDENTITY_INSERT invoices ON;
 
-INSERT INTO invoices (id, water_meter_code, customer_id, customer_code, collect_month, collect_year, consumption_amount, consumption_total, consumption_price, total, status, created_by) 
+INSERT INTO invoices (id, customer_id, collect_month, collect_year, consumption_amount, total, status, created_by) 
 VALUES 
-(1, 'WM1001', 1, 'KH0001', 1, 2025, 30.5, 150.2, 5000, 152500, 'Pending', 1),
-(2, 'WM1002', 2, 'KH0002', 1, 2025, 25.0, 120.0, 5000, 125000, 'Paid', 2),
-(3, 'WM1003', 3, 'KH0003', 1, 2025, 40.0, 200.0, 5000, 200000, 'Pending', NULL);
+(1, 1, 1, 2025, 5000, 152500, 'Pending', 1),
+(2, 2, 1, 2025, 5000, 125000, 'Paid', 2),
+(3, 3, 1, 2025, 5000, 200000, 'Pending', NULL);
 
 SET IDENTITY_INSERT invoices OFF;
