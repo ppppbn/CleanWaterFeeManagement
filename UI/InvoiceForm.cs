@@ -55,7 +55,7 @@ namespace CleanWaterFeeManagement.UI
         if (success)
         {
           MessageBox.Show("Hóa đơn đã được tạo thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-          LoadInvoices();
+          LoadInvoices(customerId, month, year);
         }
         else
         {

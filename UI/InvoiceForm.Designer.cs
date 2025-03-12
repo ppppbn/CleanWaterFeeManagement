@@ -60,10 +60,14 @@
       // Button - Tạo hóa đơn
       btnCreateInvoice.Text = "Tạo hóa đơn";
       btnCreateInvoice.Location = new Point(400, 20);
+      btnCreateInvoice.Size = new Size(100, 23);
+      btnCreateInvoice.Click += btnCreateInvoice_Click;
 
       // Button - Tìm kiếm hóa đơn
       btnSearchInvoice.Text = "Tìm kiếm";
       btnSearchInvoice.Location = new Point(400, 50);
+      btnSearchInvoice.Size = new Size(100, 23);
+      btnSearchInvoice.Click += btnSearch_Click;
 
       // InvoiceForm
       AutoScaleDimensions = new SizeF(7F, 15F);
