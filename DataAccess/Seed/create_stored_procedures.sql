@@ -22,12 +22,13 @@ IF OBJECT_ID('dbo.GetAllInvoices', 'P') IS NOT NULL DROP PROCEDURE dbo.GetAllInv
 CREATE PROCEDURE AddCustomer
     @name VARCHAR(100),
     @phone_number VARCHAR(20),
+    @customer_code VARCHAR(100),
     @water_meter_code VARCHAR(50),
     @created_by INT
 AS
 BEGIN
-    INSERT INTO customers (name, phone_number, water_meter_code, created_by)
-    VALUES (@name, @phone_number, @water_meter_code, @created_by);
+    INSERT INTO customers (name, phone_number, customer_code, water_meter_code, created_by)
+    VALUES (@name, @phone_number, @customer_code, @water_meter_code, @created_by);
 END;
 GO
 
@@ -87,6 +88,15 @@ BEGIN
     UPDATE employees
     SET name = @name, username = @username, password = @password, role = @role
     WHERE id = @id;
+END;
+GO
+
+-- Stored Procedure: Delete Employee
+CREATE PROCEDURE DeleteEmployee
+    @id INT
+AS
+BEGIN
+    DELETE FROM employees WHERE id = @id;
 END;
 GO
 

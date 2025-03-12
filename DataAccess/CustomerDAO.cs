@@ -57,12 +57,13 @@ namespace CleanWaterFeeManagement.DataAccess
                 conn.Open();
 
                 dataAdapter.InsertCommand = new SqlCommand(
-                    "INSERT INTO customers (name, phone_number, water_meter_code, created_by) " +
-                    "VALUES (@name, @phone_number, @water_meter_code, @created_by);", conn);
+                    "INSERT INTO customers (name, phone_number, water_meter_code, customer_code, created_by) " +
+                    "VALUES (@name, @phone_number, @water_meter_code, @customer_code, @created_by);", conn);
 
                 dataAdapter.InsertCommand.Parameters.Add("@name", SqlDbType.NVarChar, 100, "name");
                 dataAdapter.InsertCommand.Parameters.Add("@phone_number", SqlDbType.NVarChar, 20, "phone_number");
                 dataAdapter.InsertCommand.Parameters.Add("@water_meter_code", SqlDbType.NVarChar, 50, "water_meter_code");
+                dataAdapter.InsertCommand.Parameters.Add("@customer_code", SqlDbType.NVarChar, 100, "customer_code");
                 dataAdapter.InsertCommand.Parameters.Add("@created_by", SqlDbType.Int, 4, "created_by");
             }
         }
@@ -136,6 +137,7 @@ namespace CleanWaterFeeManagement.DataAccess
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@name", customer.Name);
                 cmd.Parameters.AddWithValue("@phone_number", customer.PhoneNumber);
+                cmd.Parameters.AddWithValue("@customer_code", customer.CustomerCode);
                 cmd.Parameters.AddWithValue("@water_meter_code", customer.WaterMeterCode);
                 cmd.Parameters.AddWithValue("@created_by", customer.CreatedBy);
 

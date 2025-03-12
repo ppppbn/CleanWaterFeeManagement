@@ -23,12 +23,13 @@ namespace CleanWaterFeeManagement.BusinessLogic
             CustomerDAO.SaveCustomerChanges(updatedTable);
         }
 
-        public static bool AddCustomer(string name, string phoneNumber, string waterMeterCode, int createdBy)
+        public static bool AddCustomer(string name, string phoneNumber, string waterMeterCode, string customerCode, int createdBy)
         {
             Customer customer = new Customer
             {
                 Name = name,
                 PhoneNumber = phoneNumber,
+                CustomerCode = customerCode,
                 WaterMeterCode = waterMeterCode,
                 CreatedBy = createdBy
             };
