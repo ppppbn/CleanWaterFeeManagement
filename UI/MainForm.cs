@@ -48,26 +48,18 @@ namespace CleanWaterFeeManagement.UI
 
         private void customersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CustomerForm custForm = new CustomerForm();
-            custForm.ShowDialog();
         }
 
         private void waterConsumptionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            WaterConsumptionForm waterForm = new WaterConsumptionForm();
-            waterForm.ShowDialog();
         }
 
         private void invoicesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            InvoiceForm invoiceForm = new InvoiceForm();
-            invoiceForm.ShowDialog();
         }
 
         private void generateReportsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ReportForm reportForm = new ReportForm();
-            reportForm.ShowDialog();
         }
     }
 }
